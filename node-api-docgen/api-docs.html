@@ -1,0 +1,142 @@
+
+        <!DOCTYPE html>
+        <html lang="ko">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>API Documentation</title>
+            <style>
+                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 40px; background: #f4f7f6; color: #333; }
+                h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; }
+                table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
+                th, td { padding: 16px; text-align: left; border-bottom: 1px solid #eee; vertical-align: top; }
+                th { background: #2c3e50; color: white; font-weight: 500; }
+                tr:hover { background-color: #f8f9fa; }
+                .method { padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.9em; color: white; display: inline-block; width: 60px; text-align: center; }
+                .get { background: #3498db; }
+                .post { background: #2ecc71; }
+                .put { background: #f1c40f; }
+                .delete { background: #e74c3c; }
+                pre { background: #2d2d2d; color: #ccc; padding: 10px; border-radius: 4px; font-size: 0.85em; margin: 0; white-space: pre-wrap; word-wrap: break-word; }
+                code { font-size: 1.1em; font-weight: bold; color: #e83e8c; }
+            </style>
+        </head>
+        <body>
+            <h1>API Documentation</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Path</th>
+                        <th>Inputs (Request)</th>
+                        <th>Outputs (Response)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                <tr>
+                    <td><span class="method get">GET</span></td>
+                    <td><code>/api/users</code></td>
+                    <td><pre>[
+  {
+    "location": "query",
+    "parameter": "role"
+  },
+  {
+    "location": "query",
+    "parameter": "page"
+  }
+]</pre></td>
+                    <td><pre>[
+  {
+    "method": "json",
+    "arguments": "{ message: user list fetched }"
+  }
+]</pre></td>
+                </tr>
+            
+                <tr>
+                    <td><span class="method get">GET</span></td>
+                    <td><code>/api/users/:id</code></td>
+                    <td><pre>[
+  {
+    "location": "params",
+    "parameter": "id"
+  }
+]</pre></td>
+                    <td><pre>[
+  {
+    "method": "json",
+    "arguments": "{ status: success }"
+  }
+]</pre></td>
+                </tr>
+            
+                <tr>
+                    <td><span class="method post">POST</span></td>
+                    <td><code>/api/users</code></td>
+                    <td><pre>[
+  {
+    "location": "body",
+    "parameter": "username"
+  },
+  {
+    "location": "body",
+    "parameter": "email"
+  },
+  {
+    "location": "body",
+    "parameter": "age"
+  }
+]</pre></td>
+                    <td><pre>[
+  {
+    "method": "json",
+    "arguments": "{ created: true }"
+  }
+]</pre></td>
+                </tr>
+            
+                <tr>
+                    <td><span class="method put">PUT</span></td>
+                    <td><code>/api/users/:id</code></td>
+                    <td><pre>[
+  {
+    "location": "params",
+    "parameter": "id"
+  },
+  {
+    "location": "body",
+    "parameter": "password"
+  }
+]</pre></td>
+                    <td><pre>[
+  {
+    "method": "send",
+    "arguments": "'user updated'"
+  }
+]</pre></td>
+                </tr>
+            
+                <tr>
+                    <td><span class="method delete">DELETE</span></td>
+                    <td><code>/api/users/:id</code></td>
+                    <td><pre>[
+  {
+    "location": "params",
+    "parameter": "id"
+  }
+]</pre></td>
+                    <td><pre>[
+  {
+    "method": "json",
+    "arguments": "{ deleted: true }"
+  }
+]</pre></td>
+                </tr>
+            
+                </tbody>
+            </table>
+        </body>
+        </html>
+        
