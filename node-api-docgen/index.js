@@ -1,21 +1,22 @@
 #!/usr/bin/env node
 
-const {Parser} = require("./src/parser");
-
-const targetCode = `
-  const express = require('express');
-  const app = express();
-
-  app.get('/api/users', (req, res) => { res.send('user list'); });
-  app.post('/api/users', (req, res) => { res.send('create user'); });
-  app.delete('/api/users/:id', (req, res) => { res.send('delete user'); });
-`;
-
+const fs = require('fs');
+const { Parser } = require('./src/parser');
+const { extractApiRoutes } = require('./src/extractor');
+const { generateDocs } = require('./src/generator');
 
 try {
-    console.log("api-docgen is running");
+    console.log('api docgen is running');
 
-    Parser(targetCode);
+    const filePath = './test-app.js';
+    const targetCode = fs.readFileSync(filePath, 'utf-8');
+
+    const ast = Parser(targetCode);
+
+    const extractedData = extractApiRoutes(ast);
+
+    generateDocs(extractedData);
+
 } catch (err) {
-    console.log("err : ", err.message);
+    console.log('err : ', err.message);
 }
