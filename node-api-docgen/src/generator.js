@@ -69,11 +69,11 @@ const generateDocs = (apiList) => {
         else command = `xdg-open "${filePath}"`; // linux
 
         exec(command, (error) => {
-            if (error) console.log('err:', error.message);
+            if (error) console.log('Error:', error.message);
         });
 
     } catch (err) {
-        console.log('err: ', err.message);
+        console.log('Error: ', err.message);
     }
 };
 
