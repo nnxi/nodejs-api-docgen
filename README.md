@@ -7,5 +7,5 @@ A zero-config CLI tool that automatically generates API documentation by statica
 It is recommended to install the package globally to use it as a CLI tool.
 
 ```
-npm install -g node-api-docgen
+npm install -g api-docgen
 ```
