@@ -8,9 +8,18 @@ const { generateDocs } = require('./src/generator');
 const { fileScanner } = require('./src/scanner');
 
 try {
-    const userInput = process.argv[2];
+    const userInput = process.argv.slice(2);
 
-    if (userInput === '--help' || userInput === '-h') {
+    if (userInput.length === 0) {
+        console.log(`
+Welcome to node-api-docgen
+
+Run 'api-docgen --help' for usage instructions.
+        `);
+        process.exit(0);
+    }
+
+    if (userInput.includes('--help') || userInput.includes('-h')) {
         console.log(`
 Usage: api-docgen [options] [arguments]
 
@@ -20,18 +29,29 @@ Arguments:
 
 Options:
   -h, --help      Print api-docgen command line options.
+  -v, --version   Print current version of node-api-docgen.
+  --strict         Only parse files that include the // @api-docgen comment.
         `)
+        process.exit(0);
+    }
+    else if (userInput.includes('--version') || userInput.includes('-v')) {
+        console.log(`
+node-api-docgen
+version : 1.0.0
+        `);
         process.exit(0);
     }
 
     console.log('api docgen is running');
 
-    const isStrict = process.argv[3].includes('--strict');
+    const isStrict = userInput.includes('--strict');
 
     let fileList = [];
     const extractedData = [];
 
-    fileList = fileScanner(userInput, fileList, isStrict);
+    const startTargetPath = userInput.find(arg => !arg.startsWith('-')) || '.';
+
+    fileList = fileScanner(startTargetPath, fileList, isStrict);
 
     for (const filePath of fileList) {
 

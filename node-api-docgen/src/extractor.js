@@ -10,7 +10,7 @@ const extractApiRoutes = (ASTree) => {
                 const propertyName = node.callee.property.name;
                 
                 if (
-                    objectName === 'app' && 
+                    (objectName === 'app' || objectName === 'router') && 
                     ['get', 'post', 'put', 'patch', 'delete'].includes(propertyName)
                 ) {
                     if (node.arguments[0] && node.arguments[0].type === 'Literal') {
