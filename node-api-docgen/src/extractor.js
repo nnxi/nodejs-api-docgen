@@ -20,7 +20,24 @@ const extractApiRoutes = (ASTree) => {
                         const inputs = [];
                         const outputs = [];
 
-                        const statements = node.arguments[1].body.body;
+                        const lastArg = node.arguments[node.arguments.length - 1];
+
+                        const isFunction = lastArg.type === 'ArrowFunctionExpression' || lastArg.type === 'FunctionExpression';
+
+                        const hasBlockBody = lastArg.body?.type === 'BlockStatement';
+
+                        if (!isFunction || !hasBlockBody) {
+                            apiList.push({
+                                Method: method,
+                                Path: path,
+                                Inputs: null,
+                                Outputs: null
+                            });
+
+                            return;
+                        }
+
+                        const statements = lastArg.body.body;
                         
                         for (let statement of statements) {
                             if (statement.type === 'VariableDeclaration') {

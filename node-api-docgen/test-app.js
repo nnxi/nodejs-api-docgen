@@ -1,3 +1,5 @@
+//@api-docgen
+
 const express = require('express');
 const app = express();
 

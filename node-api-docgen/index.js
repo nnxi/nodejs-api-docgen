@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
-const path = require('path');
+const packageJson = require('./package.json');
 const { Parser } = require('./src/parser');
 const { extractApiRoutes } = require('./src/extractor');
 const { generateDocs } = require('./src/generator');
@@ -24,20 +24,20 @@ Run 'api-docgen --help' for usage instructions.
 Usage: api-docgen [options] [arguments]
 
 Arguments:
-  [filename]      Generates API documentation based on routes in the specified file.
-                  (default: app.js)
+  [path]          Generates API documentation based on routes in the specified file or directory.
+                  (default: .)
 
 Options:
   -h, --help      Print api-docgen command line options.
   -v, --version   Print current version of node-api-docgen.
-  --strict         Only parse files that include the // @api-docgen comment.
+  --strict        Only parse files that include the // @api-docgen comment.
         `)
         process.exit(0);
     }
     else if (userInput.includes('--version') || userInput.includes('-v')) {
         console.log(`
 node-api-docgen
-version : 1.0.0
+version : ${packageJson.version}
         `);
         process.exit(0);
     }
