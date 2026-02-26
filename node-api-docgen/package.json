@@ -15,7 +15,7 @@
     "express"
   ],
   "author": "nnxi",
-  "license": "ISC",
+  "license": "MIT",
   "type": "commonjs",
   "dependencies": {
     "acorn": "^8.16.0",

@@ -5,6 +5,7 @@ const path = require('path');
 const { Parser } = require('./src/parser');
 const { extractApiRoutes } = require('./src/extractor');
 const { generateDocs } = require('./src/generator');
+const { fileScanner } = require('./src/scanner');
 
 try {
     const userInput = process.argv[2];
@@ -19,23 +20,27 @@ Arguments:
 
 Options:
   -h, --help      Print api-docgen command line options.
-        `);
+        `)
         process.exit(0);
-    }
-
-    const filePath = path.resolve(process.cwd(), userInput || 'app.js');
-
-    if (!fs.existsSync(filePath)) {
-        throw new Error(`Cannot find file ${filePath}\nUsage: api-docgen <filename>`)
     }
 
     console.log('api docgen is running');
 
-    const targetCode = fs.readFileSync(filePath, 'utf-8');
+    const isStrict = process.argv[3].includes('--strict');
 
-    const ast = Parser(targetCode);
+    let fileList = [];
+    const extractedData = [];
 
-    const extractedData = extractApiRoutes(ast);
+    fileList = fileScanner(userInput, fileList, isStrict);
+
+    for (const filePath of fileList) {
+
+        const targetCode = fs.readFileSync(filePath, 'utf-8');
+
+        const ast = Parser(targetCode);
+        
+        extractedData.push(extractApiRoutes(ast));
+    }
 
     generateDocs(extractedData);
 
