@@ -40,26 +40,53 @@ const extractApiRoutes = (ASTree) => {
                         const statements = lastArg.body.body;
                         
                         for (let statement of statements) {
-                            if (statement.type === 'VariableDeclaration') {
+                            if (statement.type === 'VariableDeclaration') {  // inputs from client
+                                const id = statement.declarations[0].id;
                                 const init = statement.declarations[0].init;
-                                
+
                                 if (init && init.type === 'MemberExpression') {
-                                    const reqType = init.object.property ? init.object.property.name : 'unknown'; 
-                                    const paramName = init.property.name; 
                                     
-                                    inputs.push({
-                                        location: reqType,
-                                        parameter: paramName
-                                    });
+                                    if (id.type === 'ObjectPattern') {
+                                        const reqType = init.property.name;
+
+                                        for (const prop of id.properties) {
+                                            inputs.push({
+                                                location: reqType,
+                                                parameter: prop.key.name
+                                            });
+                                        }
+                                    }
+                                    else if (id.type === 'Identifier') {
+                                        const reqType = init.object.property ? init.object.property.name : 'unknown';
+                                        const paramName = init.property.name;
+
+                                        inputs.push({
+                                            location: reqType,
+                                            parameter: paramName
+                                        });
+                                    }
                                 }
                             } 
-                            else if (statement.type === 'ExpressionStatement') {
+                            else if (statement.type === 'ExpressionStatement') {  // ouputs from server
                                 const expr = statement.expression;
                                 
                                 if (expr && expr.type === 'CallExpression' && expr.callee.type === 'MemberExpression') {
-                                    const resObj = expr.callee.object.name;
+                                    const resObjType = expr.callee.object.type;
                                     const resMethod = expr.callee.property.name;
-                                    
+                                    let resCode = 200;
+
+                                    if (resObjType === 'CallExpression') {
+                                        const innerCallee = expr.callee.object.callee;
+
+                                        if (innerCallee && innerCallee.type === 'MemberExpression' && innerCallee.property.name === 'status') {
+                                            const argNode = expr.callee.object.arguments[0];
+
+                                            if (argNode && argNode.type === 'Literal') {
+                                                resCode = argNode.value;
+                                            }
+                                        }
+                                    }
+
                                     let returnData = '';
                                     if (expr.arguments[0] && expr.arguments[0].type === 'ObjectExpression') {
                                         const prop = expr.arguments[0].properties[0];
@@ -71,6 +98,7 @@ const extractApiRoutes = (ASTree) => {
                                     }
 
                                     outputs.push({
+                                        status: resCode || null,
                                         method: `${resMethod}`,
                                         arguments: returnData
                                     });

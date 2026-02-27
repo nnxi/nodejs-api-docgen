@@ -70,7 +70,6 @@ const generateDocs = (apiList) => {
                     letter-spacing: -0.5px;
                 }
 
-                /* 메인 컨테이너 */
                 main {
                     max-width: 1200px;
                     margin: 40px auto;

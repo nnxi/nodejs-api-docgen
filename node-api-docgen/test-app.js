@@ -6,7 +6,7 @@ const app = express();
 app.get('/api/users', (req, res) => {
     const role = req.query.role;
     const page = req.query.page;
-    res.json({ message: 'user list fetched' });
+    res.status(200).json({ message: 'user list fetched' });
 });
 
 app.get('/api/users/:id', (req, res) => {
@@ -16,8 +16,7 @@ app.get('/api/users/:id', (req, res) => {
 
 app.post('/api/users', (req, res) => {
     const username = req.body.username;
-    const email = req.body.email;
-    const age = req.body.age;
+    const { email, age } = req.body;
     res.json({ created: true });
 });
 
