@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
+const path = require('path')
 const packageJson = require('./package.json');
 const { Parser } = require('./src/parser');
 const { extractApiRoutes } = require('./src/extractor');
@@ -25,7 +26,7 @@ Usage: api-docgen [options] [arguments]
 
 Arguments:
   [path]          Generates API documentation based on routes in the specified file or directory.
-                  (default: .)
+                  (default: app.js)
 
 Options:
   -h, --help      Print api-docgen command line options.
@@ -45,25 +46,37 @@ version : ${packageJson.version}
     console.log('api docgen is running');
 
     const isStrict = userInput.includes('--strict');
+    const startTargetPath = userInput.find(arg => !arg.startsWith('-')) || 'app.js';
+    
+    const absoluteRootPath = path.resolve(process.cwd(), startTargetPath);
 
-    let fileList = [];
-    const extractedData = [];
+    if (!fs.existsSync(absoluteRootPath)) {
+        console.log(`Error: Entry file '${startTargetPath}' not found.`);
+        process.exit(1);
+    }
 
-    const startTargetPath = userInput.find(arg => !arg.startsWith('-')) || '.';
+    const visitedFiles = new Set();
+    visitedFiles.add(absoluteRootPath);
 
-    fileList = fileScanner(startTargetPath, fileList, isStrict);
+    try {
+        const targetCode = fs.readFileSync(absoluteRootPath, 'utf-8');
 
-    for (const filePath of fileList) {
-
-        const targetCode = fs.readFileSync(filePath, 'utf-8');
+        if (isStrict && !targetCode.includes('//@api-docgen')) {
+            console.log('Strict mode enabled: Target file does not have //@api-docgen tag.');
+            process.exit(0);
+        }
 
         const ast = Parser(targetCode);
         
-        extractedData.push(extractApiRoutes(ast));
+        const extractedData = extractApiRoutes(ast, '', visitedFiles, isStrict); 
+
+        generateDocs(extractedData);
+        
+        console.log('Documentation generated successfully');
+
+    } catch (err) {
+        console.log('Error: ', err.message);
     }
-
-    generateDocs(extractedData);
-
 } catch (err) {
     console.log('Error: ', err.message);
 }

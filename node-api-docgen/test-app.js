@@ -3,33 +3,18 @@
 const express = require('express');
 const app = express();
 
-app.get('/api/users', (req, res) => {
-    const role = req.query.role;
-    const page = req.query.page;
-    res.status(200).json({ message: 'user list fetched' });
+// 외부 라우터 모듈 불러오기 (확장자 생략됨)
+const userRouter = require('./routes/user');
+const postRouter = require('./routes/post');
+
+// 1. 메인 앱에 직접 연결된 API (부모 경로 없음)
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'Server is healthy' });
 });
 
-app.get('/api/users/:id', (req, res) => {
-    const userId = req.params.id;
-    res.json({ status: 'success' });
-});
-
-app.post('/api/users', (req, res) => {
-    const username = req.body.username;
-    const { email, age } = req.body;
-    res.json({ created: true });
-});
-
-app.put('/api/users/:id', (req, res) => {
-    const targetId = req.params.id;
-    const newPassword = req.body.password;
-    res.send('user updated');
-});
-
-app.delete('/api/users/:id', (req, res) => {
-    const deleteId = req.params.id;
-    res.json({ deleted: true });
-});
+// 2. 라우터 위임 (부모 경로 '/api/users' 부여)
+app.use('/api/users', userRouter);
+app.use('/api/posts', postRouter);
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');

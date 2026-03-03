@@ -160,20 +160,7 @@
                             
                 <tr>
                     <td><span class="method get">GET</span></td>
-                    <td><code>/health</code></td>
-                    <td><pre>None</pre></td>
-                    <td><pre>[
-  {
-    "status": 200,
-    "method": "json",
-    "arguments": "{ status: Server is healthy }"
-  }
-]</pre></td>
-                </tr>
-            
-                <tr>
-                    <td><span class="method get">GET</span></td>
-                    <td><code>/api/users/</code></td>
+                    <td><code>/api/users</code></td>
                     <td><pre>[
   {
     "location": "query",
@@ -182,20 +169,47 @@
   {
     "location": "query",
     "parameter": "page"
+  },
+  {
+    "location": "query",
+    "parameter": "limit"
+  }
+]</pre></td>
+                    <td><pre>[
+  {
+    "status": 200,
+    "method": "log",
+    "arguments": "'Executing:'"
+  },
+  {
+    "status": 200,
+    "method": "json",
+    "arguments": "{ message: user list fetched }"
+  }
+]</pre></td>
+                </tr>
+            
+                <tr>
+                    <td><span class="method get">GET</span></td>
+                    <td><code>/api/users/:id</code></td>
+                    <td><pre>[
+  {
+    "location": "params",
+    "parameter": "id"
   }
 ]</pre></td>
                     <td><pre>[
   {
     "status": 200,
     "method": "json",
-    "arguments": "{ message: User list fetched }"
+    "arguments": "{ status: success }"
   }
 ]</pre></td>
                 </tr>
             
                 <tr>
                     <td><span class="method post">POST</span></td>
-                    <td><code>/api/users/profile</code></td>
+                    <td><code>/api/users</code></td>
                     <td><pre>[
   {
     "location": "body",
@@ -203,14 +217,53 @@
   },
   {
     "location": "body",
+    "parameter": "email"
+  },
+  {
+    "location": "body",
     "parameter": "age"
+  },
+  {
+    "location": "query",
+    "parameter": "referral"
   }
 ]</pre></td>
                     <td><pre>[
   {
+    "status": 200,
+    "method": "log",
+    "arguments": "'DB Insert:'"
+  },
+  {
     "status": 201,
     "method": "json",
     "arguments": "{ created: true }"
+  }
+]</pre></td>
+                </tr>
+            
+                <tr>
+                    <td><span class="method put">PUT</span></td>
+                    <td><code>/api/users/:id</code></td>
+                    <td><pre>[
+  {
+    "location": "params",
+    "parameter": "id"
+  },
+  {
+    "location": "body",
+    "parameter": "password"
+  },
+  {
+    "location": "body",
+    "parameter": "profileImage"
+  }
+]</pre></td>
+                    <td><pre>[
+  {
+    "status": 204,
+    "method": "send",
+    "arguments": "'user updated'"
   }
 ]</pre></td>
                 </tr>
@@ -227,34 +280,13 @@
                     <td><pre>[
   {
     "status": 200,
+    "method": "log",
+    "arguments": "'Run:'"
+  },
+  {
+    "status": 200,
     "method": "json",
     "arguments": "{ deleted: true }"
-  }
-]</pre></td>
-                </tr>
-            
-                <tr>
-                    <td><span class="method get">GET</span></td>
-                    <td><code>/api/posts/</code></td>
-                    <td><pre>None</pre></td>
-                    <td><pre>[
-  {
-    "status": 200,
-    "method": "json",
-    "arguments": "{ success: true }"
-  }
-]</pre></td>
-                </tr>
-            
-                <tr>
-                    <td><span class="method get">GET</span></td>
-                    <td><code>/api/posts/:id</code></td>
-                    <td><pre>None</pre></td>
-                    <td><pre>[
-  {
-    "status": 200,
-    "method": "json",
-    "arguments": "{ success: true }"
   }
 ]</pre></td>
                 </tr>
