@@ -13,6 +13,8 @@
                     --border-color: #e2e8f0;
                     --header-bg: #ffffff;
                     --code-bg: #1e1e1e;
+                    --tag-bg: #edf2f7;
+                    --tag-text: #4a5568;
                 }
                 
                 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -115,6 +117,28 @@
                 .patch { background: #805ad5; }
                 .delete { background: #e53e3e; }
 
+                .route-info {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin-bottom: 8px;
+                }
+
+                .tag-badge {
+                    background-color: var(--tag-bg);
+                    color: var(--tag-text);
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                }
+
+                .summary-text {
+                    font-size: 0.9rem;
+                    color: var(--text-muted);
+                }
+
                 code { 
                     font-size: 0.95rem; 
                     font-weight: 600; 
@@ -151,7 +175,7 @@
                         <thead>
                             <tr>
                                 <th>Method</th>
-                                <th>Path</th>
+                                <th>Path & Info</th>
                                 <th>Inputs (Request)</th>
                                 <th>Outputs (Response)</th>
                             </tr>
@@ -159,136 +183,66 @@
                         <tbody>
                             
                 <tr>
-                    <td><span class="method get">GET</span></td>
-                    <td><code>/api/users</code></td>
-                    <td><pre>[
-  {
-    "location": "query",
-    "parameter": "role"
-  },
-  {
-    "location": "query",
-    "parameter": "page"
-  },
-  {
-    "location": "query",
-    "parameter": "limit"
-  }
-]</pre></td>
-                    <td><pre>[
-  {
-    "status": 200,
-    "method": "log",
-    "arguments": "'Executing:'"
-  },
-  {
-    "status": 200,
-    "method": "json",
-    "arguments": "{ message: user list fetched }"
-  }
-]</pre></td>
+                    <td>
+                        <span class="method get">GET</span>
+                    </td>
+                    <td>
+                        <div class="route-info">
+                            <span class="tag-badge">Posts</span>
+                            <code>/api/posts/</code>
+                        </div>
+                        <div class="summary-text">Retrieve all posts</div>
+                    </td>
+                    <td><pre>query { page: number, limit: number }</pre></td>
+                    <td><pre>200 { success: boolean, data: Array<{id: number, title: string}> }</pre></td>
                 </tr>
             
                 <tr>
-                    <td><span class="method get">GET</span></td>
-                    <td><code>/api/users/:id</code></td>
-                    <td><pre>[
-  {
-    "location": "params",
-    "parameter": "id"
-  }
-]</pre></td>
-                    <td><pre>[
-  {
-    "status": 200,
-    "method": "json",
-    "arguments": "{ status: success }"
-  }
-]</pre></td>
+                    <td>
+                        <span class="method get">GET</span>
+                    </td>
+                    <td>
+                        <div class="route-info">
+                            <span class="tag-badge">Posts</span>
+                            <code>/api/posts/:id</code>
+                        </div>
+                        <div class="summary-text">Retrieve a specific post by ID</div>
+                    </td>
+                    <td><pre>param { id: number }</pre></td>
+                    <td><pre>200 { success: boolean, data: { id: number, title: string, content: string } }
+404 { success: false, message: string }</pre></td>
                 </tr>
             
                 <tr>
-                    <td><span class="method post">POST</span></td>
-                    <td><code>/api/users</code></td>
-                    <td><pre>[
-  {
-    "location": "body",
-    "parameter": "username"
-  },
-  {
-    "location": "body",
-    "parameter": "email"
-  },
-  {
-    "location": "body",
-    "parameter": "age"
-  },
-  {
-    "location": "query",
-    "parameter": "referral"
-  }
-]</pre></td>
-                    <td><pre>[
-  {
-    "status": 200,
-    "method": "log",
-    "arguments": "'DB Insert:'"
-  },
-  {
-    "status": 201,
-    "method": "json",
-    "arguments": "{ created: true }"
-  }
-]</pre></td>
+                    <td>
+                        <span class="method post">POST</span>
+                    </td>
+                    <td>
+                        <div class="route-info">
+                            <span class="tag-badge">Users</span>
+                            <code>/api/users/</code>
+                        </div>
+                        <div class="summary-text">Create a new user</div>
+                    </td>
+                    <td><pre>body { username: string, email: string }</pre></td>
+                    <td><pre>201 { success: true, userId: number }
+400 { success: false, message: string }</pre></td>
                 </tr>
             
                 <tr>
-                    <td><span class="method put">PUT</span></td>
-                    <td><code>/api/users/:id</code></td>
-                    <td><pre>[
-  {
-    "location": "params",
-    "parameter": "id"
-  },
-  {
-    "location": "body",
-    "parameter": "password"
-  },
-  {
-    "location": "body",
-    "parameter": "profileImage"
-  }
-]</pre></td>
-                    <td><pre>[
-  {
-    "status": 204,
-    "method": "send",
-    "arguments": "'user updated'"
-  }
-]</pre></td>
-                </tr>
-            
-                <tr>
-                    <td><span class="method delete">DELETE</span></td>
-                    <td><code>/api/users/:id</code></td>
-                    <td><pre>[
-  {
-    "location": "params",
-    "parameter": "id"
-  }
-]</pre></td>
-                    <td><pre>[
-  {
-    "status": 200,
-    "method": "log",
-    "arguments": "'Run:'"
-  },
-  {
-    "status": 200,
-    "method": "json",
-    "arguments": "{ deleted: true }"
-  }
-]</pre></td>
+                    <td>
+                        <span class="method delete">DELETE</span>
+                    </td>
+                    <td>
+                        <div class="route-info">
+                            <span class="tag-badge">Users</span>
+                            <code>/api/users/:id</code>
+                        </div>
+                        <div class="summary-text">Delete a user</div>
+                    </td>
+                    <td><pre>param { id: number }
+query { aaa: number }</pre></td>
+                    <td><pre>200 { success: true }</pre></td>
                 </tr>
             
                         </tbody>

@@ -1,18 +1,26 @@
 {
-  "name": "api-docgen",
+  "name": "nodejs-api-docgen",
   "version": "1.0.0",
-  "description": "Auto API documentation generator for Express",
+  "description": "Generate clean Express API docs directly from route comments using AST",
   "main": "index.js",
   "bin": {
     "api-docgen": "./index.js"
   },
+  "files": [
+    "index.js",
+    "src/"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "api",
+    "documentation",
     "docgen",
-    "express"
+    "express",
+    "ast",
+    "jsdoc",
+    "router"
   ],
   "author": "nnxi",
   "license": "MIT",

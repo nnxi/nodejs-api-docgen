@@ -6,7 +6,6 @@ const packageJson = require('./package.json');
 const { Parser } = require('./src/parser');
 const { extractApiRoutes } = require('./src/extractor');
 const { generateDocs } = require('./src/generator');
-const { fileScanner } = require('./src/scanner');
 
 try {
     const userInput = process.argv.slice(2);
@@ -25,13 +24,30 @@ Run 'api-docgen --help' for usage instructions.
 Usage: api-docgen [options] [arguments]
 
 Arguments:
-  [path]          Generates API documentation based on routes in the specified file or directory.
+  [path]          Generates API documentation based on routes in the specified file.
                   (default: app.js)
 
 Options:
   -h, --help      Print api-docgen command line options.
   -v, --version   Print current version of node-api-docgen.
-  --strict        Only parse files that include the // @api-docgen comment.
+  --strict        Only generate documentation for routes explicitly marked 
+                  with the @api-docgen JSDoc tag.
+
+Comment Block Format:
+  To document a route, place a JSDoc-style comment block directly above it.
+  Supported tags: @api-docgen (for --strict mode), @tag, @summary, @req, @res.
+
+  Example:
+    /**
+     * @api-docgen
+     * @tag Users
+     * @summary Create a new user
+     * @req body { username: string, email: string }
+     * @res 201 { success: true, userId: number }
+     */
+    router.post('/', (req, res) => { ... });
+
+For more detailed guides, visit: https://github.com/nnxi/node-api-docgen
         `)
         process.exit(0);
     }
@@ -61,19 +77,11 @@ version : ${packageJson.version}
     try {
         const targetCode = fs.readFileSync(absoluteRootPath, 'utf-8');
 
-        if (isStrict && !targetCode.includes('//@api-docgen')) {
-            console.log('Strict mode enabled: Target file does not have //@api-docgen tag.');
-            process.exit(0);
-        }
-
-        const ast = Parser(targetCode);
+        const { ast, comments } = Parser(targetCode);
         
-        const extractedData = extractApiRoutes(ast, '', visitedFiles, isStrict); 
+        const extractedData = extractApiRoutes(ast, comments, '', visitedFiles, isStrict); 
 
         generateDocs(extractedData);
-        
-        console.log('Documentation generated successfully');
-
     } catch (err) {
         console.log('Error: ', err.message);
     }

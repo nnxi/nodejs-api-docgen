@@ -1,0 +1,4 @@
+@ .npmignore
+/test
+/bug
+api-docs.html
