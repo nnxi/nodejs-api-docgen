@@ -1,4 +1,4 @@
-# node-api-docgen
+# nodejs-api-docgen
 
 Generate clean Express API docs directly from route comments using AST.
 A zero-config API documentation tool that helps you share API specifications with your frontend team seamlessly.
@@ -8,10 +8,10 @@ A zero-config API documentation tool that helps you share API specifications wit
 Install the package globally to use the CLI from anywhere:
 
 ```bash
-npm install -g node-api-docgen
+npm install -g nodejs-api-docgen
 ```
 
-*(Alternatively, you can install it as a dev dependency in your project: `npm i -D node-api-docgen`)*
+*(Alternatively, you can install it as a dev dependency in your project: `npm i -D nodejs-api-docgen`)*
 
 ## Usage
 

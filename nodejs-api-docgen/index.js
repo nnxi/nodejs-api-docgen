@@ -12,7 +12,7 @@ try {
 
     if (userInput.length === 0) {
         console.log(`
-Welcome to node-api-docgen
+Welcome to nodejs-api-docgen
 
 Run 'api-docgen --help' for usage instructions.
         `);
@@ -29,7 +29,7 @@ Arguments:
 
 Options:
   -h, --help      Print api-docgen command line options.
-  -v, --version   Print current version of node-api-docgen.
+  -v, --version   Print current version of nodejs-api-docgen.
   --strict        Only generate documentation for routes explicitly marked 
                   with the @api-docgen JSDoc tag.
 
@@ -47,13 +47,13 @@ Comment Block Format:
      */
     router.post('/', (req, res) => { ... });
 
-For more detailed guides, visit: https://github.com/nnxi/node-api-docgen
+For more detailed guides, visit: https://github.com/nnxi/nodejs-api-docgen
         `)
         process.exit(0);
     }
     else if (userInput.includes('--version') || userInput.includes('-v')) {
         console.log(`
-node-api-docgen
+nodejs-api-docgen
 version : ${packageJson.version}
         `);
         process.exit(0);

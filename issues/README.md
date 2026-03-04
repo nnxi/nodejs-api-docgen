@@ -1,6 +1,6 @@
 # Bug Reports
 
-If you encounter any issues while using `node-api-docgen`, please report them by creating a new markdown file in this folder, or by opening an issue on GitHub.
+If you encounter any issues while using `nodejs-api-docgen`, please report them by creating a new markdown file in this folder, or by opening an issue on GitHub.
 
 When reporting a bug, providing detailed information helps us resolve it faster.
 
@@ -11,7 +11,7 @@ Please include the following information in your report:
 ### 1. Environment Details
 - **Node.js version:** (e.g., v18.16.0)
 - **Express version:** (e.g., 4.18.2)
-- **node-api-docgen version:** (e.g., 1.0.0)
+- **nodejs-api-docgen version:** (e.g., 1.0.0)
 - **OS:** (e.g., macOS Sonoma, Windows 11)
 
 ### 2. Steps to Reproduce
