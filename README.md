@@ -1,6 +1,6 @@
 # node-api-docgen
 
-A zero-config CLI tool that automatically generates API documentation by statically analyzing (AST) Express.js code. Parse your routes with a single terminal command without starting the server.
+A CLI tool that automatically generates API documentation by statically analyzing (AST) Express.js code alongside minimal inline comments. Parse your routes with a single terminal command without starting the server.
 
 ## Installation
 
