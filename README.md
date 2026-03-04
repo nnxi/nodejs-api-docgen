@@ -1,5 +1,8 @@
 # nodejs-api-docgen
 
+[![NPM Version](https://img.shields.io/npm/v/nodejs-api-docgen.svg)](https://www.npmjs.com/package/nodejs-api-docgen)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-black.svg?logo=github)](https://github.com/nnxi/nodejs-api-docgen)
+
 Generate clean Express API docs directly from route comments using AST.
 A zero-config API documentation tool that helps you share API specifications with your frontend team seamlessly.
 
