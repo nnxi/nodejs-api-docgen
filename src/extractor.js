@@ -3,7 +3,7 @@ const path = require('path');
 const walk = require('acorn-walk');
 const { Parser } = require('../src/parser');
 
-const extractApiRoutes = (ASTree, comments, parentsUrl = '', visitedFiles, isStrict) => {
+const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visitedFiles, isStrict) => {
     const apiList = [];
     const routerMap = new Map();
 
@@ -41,7 +41,9 @@ const extractApiRoutes = (ASTree, comments, parentsUrl = '', visitedFiles, isStr
                                 routePath += '.js';
                             }
 
-                            const absolutePath = path.join(process.cwd(), routePath);
+                            const baseDir = path.dirname(path.resolve(parentsPath));
+
+                            const absolutePath = path.resolve(baseDir, routePath);
 
                             if (visitedFiles.has(absolutePath)) {
                                 return;
@@ -52,7 +54,7 @@ const extractApiRoutes = (ASTree, comments, parentsUrl = '', visitedFiles, isStr
                             
                             const { ast, comments: comm } = Parser(targetCode);
 
-                            const childRoutes = extractApiRoutes(ast, comm, basePath, visitedFiles, isStrict);
+                            const childRoutes = extractApiRoutes(absolutePath, ast, comm, basePath, visitedFiles, isStrict);
                             
                             apiList.push(...childRoutes);
                         }

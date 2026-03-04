@@ -1,6 +1,6 @@
 {
   "name": "nodejs-api-docgen",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Generate clean Express API docs directly from route comments using AST",
   "main": "index.js",
   "bin": {

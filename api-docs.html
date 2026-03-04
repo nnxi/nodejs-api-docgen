@@ -46,7 +46,7 @@
                 }
 
                 main {
-                    max-width: 1200px;
+                    max-width: 1000px;
                     margin: 40px auto;
                     padding: 0 20px;
                 }
@@ -63,46 +63,136 @@
                     font-size: 0.95rem;
                 }
 
-                .table-container {
+                /* 드롭다운 (Details & Summary) 스타일 */
+                details.tag-group {
                     background: white;
+                    border-radius: 8px;
+                    margin-bottom: 16px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                    border: 1px solid var(--border-color);
+                    overflow: hidden;
+                }
+
+                summary.tag-title {
+                    padding: 16px 24px;
+                    font-size: 1.15rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    background-color: #f7fafc;
+                    display: flex;
+                    align-items: center;
+                    user-select: none;
+                    list-style: none;
+                    border-bottom: 1px solid transparent;
+                }
+
+                summary.tag-title::-webkit-details-marker {
+                    display: none;
+                }
+
+                details[open] summary.tag-title {
+                    border-bottom-color: var(--border-color);
+                }
+
+                summary.tag-title::before {
+                    content: '▶';
+                    font-size: 0.8rem;
+                    margin-right: 12px;
+                    color: var(--text-muted);
+                    transition: transform 0.2s ease-in-out;
+                }
+
+                details[open] summary.tag-title::before {
+                    transform: rotate(90deg);
+                }
+
+                .route-count {
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    color: var(--text-muted);
+                    margin-left: 12px;
+                    background: var(--tag-bg);
+                    padding: 2px 10px;
                     border-radius: 12px;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
-                    overflow-x: auto;
                 }
 
-                table { 
-                    width: 100%; 
-                    border-collapse: separate; 
-                    border-spacing: 0;
+                .tag-content {
+                    padding: 24px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
                 }
 
-                th, td { 
-                    padding: 18px 24px; 
-                    text-align: left; 
-                    border-bottom: 1px solid var(--border-color); 
-                    vertical-align: top; 
+                /* API 라우트 카드 스타일 */
+                .route-card {
+                    border: 1px solid var(--border-color);
+                    border-radius: 8px;
+                    overflow: hidden;
                 }
 
-                th { 
-                    background-color: #f7fafc; 
-                    color: #4a5568; 
-                    font-weight: 600; 
-                    font-size: 0.85rem;
+                .route-header {
+                    display: flex;
+                    align-items: center;
+                    padding: 12px 16px;
+                    background-color: #f8f9fa;
+                    border-bottom: 1px solid var(--border-color);
+                    gap: 16px;
+                }
+
+                .route-body {
+                    padding: 20px;
+                }
+
+                .summary-text {
+                    font-size: 0.95rem;
+                    color: var(--text-main);
+                    margin-bottom: 20px;
+                    font-weight: 500;
+                }
+
+                /* 세로 나열 레이아웃 */
+                .payload-container {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                }
+
+                .payload-section {
+                    background: var(--code-bg);
+                    border-radius: 6px;
+                    overflow: hidden;
+                }
+
+                .payload-title {
+                    background: #2d3748;
+                    color: #e2e8f0;
+                    padding: 8px 16px;
+                    font-size: 0.75rem;
+                    font-weight: 600;
                     text-transform: uppercase;
                     letter-spacing: 0.5px;
+                    border-bottom: 1px solid #4a5568;
                 }
 
-                tr:last-child td {
-                    border-bottom: none;
+                code { 
+                    font-size: 1rem; 
+                    font-weight: 600; 
+                    color: #e53e3e; 
                 }
 
-                tr:hover td { 
-                    background-color: #fbfbfc; 
+                pre { 
+                    color: #e2e8f0; 
+                    padding: 16px; 
+                    font-size: 0.9rem; 
+                    margin: 0; 
+                    white-space: pre-wrap; 
+                    word-wrap: break-word; 
+                    font-family: 'Fira Code', Consolas, Monaco, monospace;
                 }
 
                 .method { 
                     padding: 6px 12px; 
-                    border-radius: 6px; 
+                    border-radius: 4px; 
                     font-weight: 700; 
                     font-size: 0.85rem; 
                     color: white; 
@@ -116,49 +206,6 @@
                 .put { background: #d69e2e; }
                 .patch { background: #805ad5; }
                 .delete { background: #e53e3e; }
-
-                .route-info {
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    margin-bottom: 8px;
-                }
-
-                .tag-badge {
-                    background-color: var(--tag-bg);
-                    color: var(--tag-text);
-                    padding: 4px 8px;
-                    border-radius: 4px;
-                    font-size: 0.75rem;
-                    font-weight: 600;
-                    text-transform: uppercase;
-                }
-
-                .summary-text {
-                    font-size: 0.9rem;
-                    color: var(--text-muted);
-                }
-
-                code { 
-                    font-size: 0.95rem; 
-                    font-weight: 600; 
-                    color: #e53e3e; 
-                    background: #fff5f5;
-                    padding: 4px 8px;
-                    border-radius: 4px;
-                }
-
-                pre { 
-                    background: var(--code-bg); 
-                    color: #e2e8f0; 
-                    padding: 16px; 
-                    border-radius: 8px; 
-                    font-size: 0.85rem; 
-                    margin: 0; 
-                    white-space: pre-wrap; 
-                    word-wrap: break-word; 
-                    font-family: 'Fira Code', Consolas, Monaco, monospace;
-                }
             </style>
         </head>
         <body>
@@ -170,83 +217,143 @@
                 <h1>API Routes Reference</h1>
                 <p class="subtitle">Automatically generated documentation for your backend API services.</p>
                 
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Method</th>
-                                <th>Path & Info</th>
-                                <th>Inputs (Request)</th>
-                                <th>Outputs (Response)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                <tr>
-                    <td>
-                        <span class="method get">GET</span>
-                    </td>
-                    <td>
-                        <div class="route-info">
-                            <span class="tag-badge">Posts</span>
+                <div class="api-container">
+                    
+                <details class="tag-group" open>
+                    <summary class="tag-title">
+                        Posts <span class="route-count">2 endpoints</span>
+                    </summary>
+                    <div class="tag-content">
+                        
+                    <div class="route-card">
+                        <div class="route-header">
+                            <span class="method get">GET</span>
                             <code>/api/posts/</code>
                         </div>
-                        <div class="summary-text">Retrieve all posts</div>
-                    </td>
-                    <td><pre>query { page: number, limit: number }</pre></td>
-                    <td><pre>200 { success: boolean, data: Array<{id: number, title: string}> }</pre></td>
-                </tr>
-            
-                <tr>
-                    <td>
-                        <span class="method get">GET</span>
-                    </td>
-                    <td>
-                        <div class="route-info">
-                            <span class="tag-badge">Posts</span>
+                        <div class="route-body">
+                            <div class="summary-text">Retrieve all posts</div>
+                            
+                            <div class="payload-container">
+                                <div class="payload-section">
+                                    <div class="payload-title">Request</div>
+                                    <pre>query { page: number, limit: number }</pre>
+                                </div>
+                                <div class="payload-section">
+                                    <div class="payload-title">Response</div>
+                                    <pre>200 { success: boolean, data: Array<{id: number, title: string}> }</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="route-card">
+                        <div class="route-header">
+                            <span class="method get">GET</span>
                             <code>/api/posts/:id</code>
                         </div>
-                        <div class="summary-text">Retrieve a specific post by ID</div>
-                    </td>
-                    <td><pre>param { id: number }</pre></td>
-                    <td><pre>200 { success: boolean, data: { id: number, title: string, content: string } }
-404 { success: false, message: string }</pre></td>
-                </tr>
+                        <div class="route-body">
+                            <div class="summary-text">Retrieve a specific post by ID</div>
+                            
+                            <div class="payload-container">
+                                <div class="payload-section">
+                                    <div class="payload-title">Request</div>
+                                    <pre>param { id: number }</pre>
+                                </div>
+                                <div class="payload-section">
+                                    <div class="payload-title">Response</div>
+                                    <pre>200 { success: boolean, data: { id: number, title: string, content: string } }
+404 { success: false, message: string }</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    </div>
+                </details>
             
-                <tr>
-                    <td>
-                        <span class="method post">POST</span>
-                    </td>
-                    <td>
-                        <div class="route-info">
-                            <span class="tag-badge">Users</span>
+                <details class="tag-group" open>
+                    <summary class="tag-title">
+                        Hidden <span class="route-count">1 endpoints</span>
+                    </summary>
+                    <div class="tag-content">
+                        
+                    <div class="route-card">
+                        <div class="route-header">
+                            <span class="method post">POST</span>
+                            <code>/api/posts/secret</code>
+                        </div>
+                        <div class="route-body">
+                            <div class="summary-text">Secret admin post route</div>
+                            
+                            <div class="payload-container">
+                                <div class="payload-section">
+                                    <div class="payload-title">Request</div>
+                                    <pre>None</pre>
+                                </div>
+                                <div class="payload-section">
+                                    <div class="payload-title">Response</div>
+                                    <pre>201 { success: boolean }</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    </div>
+                </details>
+            
+                <details class="tag-group" open>
+                    <summary class="tag-title">
+                        Users <span class="route-count">2 endpoints</span>
+                    </summary>
+                    <div class="tag-content">
+                        
+                    <div class="route-card">
+                        <div class="route-header">
+                            <span class="method post">POST</span>
                             <code>/api/users/</code>
                         </div>
-                        <div class="summary-text">Create a new user</div>
-                    </td>
-                    <td><pre>body { username: string, email: string }</pre></td>
-                    <td><pre>201 { success: true, userId: number }
-400 { success: false, message: string }</pre></td>
-                </tr>
-            
-                <tr>
-                    <td>
-                        <span class="method delete">DELETE</span>
-                    </td>
-                    <td>
-                        <div class="route-info">
-                            <span class="tag-badge">Users</span>
+                        <div class="route-body">
+                            <div class="summary-text">Create a new user</div>
+                            
+                            <div class="payload-container">
+                                <div class="payload-section">
+                                    <div class="payload-title">Request</div>
+                                    <pre>body { username: string, email: string }</pre>
+                                </div>
+                                <div class="payload-section">
+                                    <div class="payload-title">Response</div>
+                                    <pre>201 { success: true, userId: number }
+400 { success: false, message: string }</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="route-card">
+                        <div class="route-header">
+                            <span class="method delete">DELETE</span>
                             <code>/api/users/:id</code>
                         </div>
-                        <div class="summary-text">Delete a user</div>
-                    </td>
-                    <td><pre>param { id: number }
-query { aaa: number }</pre></td>
-                    <td><pre>200 { success: true }</pre></td>
-                </tr>
+                        <div class="route-body">
+                            <div class="summary-text">Delete a user</div>
+                            
+                            <div class="payload-container">
+                                <div class="payload-section">
+                                    <div class="payload-title">Request</div>
+                                    <pre>param { id: number }
+query { aaa: number }</pre>
+                                </div>
+                                <div class="payload-section">
+                                    <div class="payload-title">Response</div>
+                                    <pre>200 { success: true }</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    </div>
+                </details>
             
-                        </tbody>
-                    </table>
                 </div>
             </main>
         </body>

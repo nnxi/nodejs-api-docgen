@@ -54,7 +54,7 @@ For more detailed guides, visit: https://github.com/nnxi/nodejs-api-docgen
     else if (userInput.includes('--version') || userInput.includes('-v')) {
         console.log(`
 nodejs-api-docgen
-version : ${packageJson.version}
+version: ${packageJson.version}
         `);
         process.exit(0);
     }
@@ -79,7 +79,7 @@ version : ${packageJson.version}
 
         const { ast, comments } = Parser(targetCode);
         
-        const extractedData = extractApiRoutes(ast, comments, '', visitedFiles, isStrict); 
+        const extractedData = extractApiRoutes(absoluteRootPath, ast, comments, '', visitedFiles, isStrict); 
 
         generateDocs(extractedData);
     } catch (err) {
