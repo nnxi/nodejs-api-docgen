@@ -304,7 +304,7 @@ const generateDocs = (apiList) => {
 Success! API documentation generated.
 File: ${filePath}
 
-[Next Step: How to share with your frontend team]
+[Next Step: How to share with your team]
 Add the following code to your Express entry file:
 
 app.get('/api-docs', (req, res) => {

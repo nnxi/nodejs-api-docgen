@@ -4,7 +4,7 @@
 [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-black.svg?logo=github)](https://github.com/nnxi/nodejs-api-docgen)
 
 Generate clean Express API docs directly from route comments using AST.
-A zero-config API documentation tool that helps you share API specifications with your frontend team seamlessly.
+A zero-config API documentation tool that helps you share API specifications with your team seamlessly.
 
 ## Installation
 
@@ -60,10 +60,10 @@ router.post('/users', (req, res) => {
 });
 ```
 
-## Sharing with Frontend Team
+## Sharing with Team
 
 Upon running the command, an `api-docs.html` file will be generated in your current directory. 
-To serve this interactive document to your frontend team, simply add the following route to your Express application:
+To serve this interactive document to your team, simply add the following route to your Express application:
 
 ```javascript
 const path = require('path');
