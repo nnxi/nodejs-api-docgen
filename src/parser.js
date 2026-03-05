@@ -7,7 +7,7 @@ const Parser = (targetCode) => {
 
     const ast = acorn.parse(cleanCode, { 
         ecmaVersion: 2020,
-        locations: true,
+        locations: true, 
         onComment: comments
     });
 

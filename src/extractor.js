@@ -5,15 +5,18 @@ const { Parser } = require('../src/parser');
 
 const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visitedFiles, isStrict) => {
     const apiList = [];
-    const routerMap = new Map();
+    
+    // Map to store router variables and their required paths (e.g., const userRoute = require('./user'))
+    const routerMap = new Map();  
 
     walk.simple(ASTree, {
-        VariableDeclaration(node) {
+        VariableDeclaration(node) {  
             const declarator = node.declarations[0];
             
             if (declarator.init && declarator.init.type === 'CallExpression') {
                 const callee = declarator.init.callee;
                 
+                // Find 'require' statements to track sub-router files
                 if (callee.type === 'Identifier' && callee.name === 'require') {
                     const routerVarName = declarator.id.name;
                     const requirePath = declarator.init.arguments[0].value;
@@ -27,6 +30,7 @@ const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visite
                 const objectName = node.callee.object.name;
                 const propertyName = node.callee.property.name;
 
+                // Case of mounting a sub-router (e.g., app.use('/api', apiRouter))
                 if ((objectName === 'app' || objectName === 'router') && propertyName === 'use') {
                     const args = node.arguments;
 
@@ -34,6 +38,7 @@ const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visite
                         const basePath = args[0].value;
                         const routerVarName = args[1].name;
 
+                        // If the argument is a known router, parse that router file recursively
                         if (routerMap.has(routerVarName)) {
                             let routePath = routerMap.get(routerVarName);
 
@@ -41,25 +46,27 @@ const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visite
                                 routePath += '.js';
                             }
 
+                            // Calculate the absolute path based on the current file's directory
                             const baseDir = path.dirname(path.resolve(parentsPath));
-
                             const absolutePath = path.resolve(baseDir, routePath);
 
+                            // Prevent infinite loops from circular dependencies
                             if (visitedFiles.has(absolutePath)) {
                                 return;
                             }
                             visitedFiles.add(absolutePath);
 
                             const targetCode = fs.readFileSync(absolutePath, 'utf-8');
-                            
                             const { ast, comments: comm } = Parser(targetCode);
 
+                            // Recursively extract routes from the sub-router
                             const childRoutes = extractApiRoutes(absolutePath, ast, comm, basePath, visitedFiles, isStrict);
                             
                             apiList.push(...childRoutes);
                         }
                     }
                 }
+                // Case of defining an API endpoint (e.g., app.get('/users', ...))
                 else if (
                     (objectName === 'app' || objectName === 'router') && 
                     ['get', 'post', 'put', 'patch', 'delete'].includes(propertyName)
@@ -70,6 +77,7 @@ const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visite
                         
                         const routeStartLine = node.loc.start.line;
 
+                        // Find the block comment located immediately above this route definition
                         const targetComment = comments.find(c => 
                             c.type === 'Block' && 
                             c.loc.end.line <= routeStartLine && 
@@ -79,12 +87,13 @@ const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visite
                         let hasDocgenTag = false;
                         let tag = 'Uncategorized';
                         let summary = '';
-                        const parsedReq = [];
+                        const parsedReq = [];  // @req and @res tags can be used multiple times
                         const parsedRes = [];
 
                         if (targetComment) {
                             const lines = targetComment.value.split('\n');
 
+                            // Parse custom tags from the comment block
                             for (let line of lines) {
                                 const text = line.replace(/^\s*\**\s*/, '').trim();
 
@@ -102,6 +111,7 @@ const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visite
                             }
                         }
 
+                        // Skip this route if --strict mode is on and @api-docgen is missing
                         if (isStrict && !hasDocgenTag) {
                             return; 
                         }

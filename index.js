@@ -62,7 +62,7 @@ version: ${packageJson.version}
     console.log('api docgen is running');
 
     const isStrict = userInput.includes('--strict');
-    const startTargetPath = userInput.find(arg => !arg.startsWith('-')) || 'app.js';
+    const startTargetPath = userInput.find(arg => !arg.startsWith('-')) || 'app.js';  // find arg not option
     
     const absoluteRootPath = path.resolve(process.cwd(), startTargetPath);
 
