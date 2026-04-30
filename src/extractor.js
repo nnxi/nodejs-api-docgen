@@ -1,19 +1,30 @@
-const fs = require('fs');
-const path = require('path');
-const walk = require('acorn-walk');
-const { Parser } = require('../src/parser');
+import fs from 'fs';
+import path from 'path';
+import walk from 'acorn-walk';
+import { Parser } from '../src/parser.js';
 
-const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visitedFiles, isStrict) => {
+export const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visitedFiles, isStrict) => {
     const apiList = [];
     
-    // Map to store router variables and their required paths (e.g., const userRoute = require('./user'))
+    // Map to store router variables and their required/imported paths
     const routerMap = new Map();  
 
     walk.simple(ASTree, {
+        // Parse ESM Import declarations (e.g., import router from './router.js')
+        ImportDeclaration(node) {
+            const importPath = node.source.value;
+            node.specifiers.forEach(specifier => {
+                // Handle both default and named imports
+                if (specifier.type === 'ImportDefaultSpecifier' || specifier.type === 'ImportSpecifier') {
+                    const localName = specifier.local.name;
+                    routerMap.set(localName, importPath);
+                }
+            });
+        },
         VariableDeclaration(node) {  
             const declarator = node.declarations[0];
             
-            if (declarator.init && declarator.init.type === 'CallExpression') {
+            if (declarator && declarator.init && declarator.init.type === 'CallExpression') {
                 const callee = declarator.init.callee;
                 
                 // Find 'require' statements to track sub-router files
@@ -27,7 +38,8 @@ const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visite
         },
         CallExpression(node) {
             if (node.callee.type === 'MemberExpression') {
-                const objectName = node.callee.object.name;
+                // Check if object exists to prevent errors on anonymous function calls
+                const objectName = node.callee.object?.name;
                 const propertyName = node.callee.property.name;
 
                 // Case of mounting a sub-router (e.g., app.use('/api', apiRouter))
@@ -42,6 +54,7 @@ const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visite
                         if (routerMap.has(routerVarName)) {
                             let routePath = routerMap.get(routerVarName);
 
+                            // Append .js extension for ESM compatibility if missing
                             if (!routePath.endsWith('.js')) {
                                 routePath += '.js';
                             }
@@ -50,8 +63,8 @@ const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visite
                             const baseDir = path.dirname(path.resolve(parentsPath));
                             const absolutePath = path.resolve(baseDir, routePath);
 
-                            // Prevent infinite loops from circular dependencies
-                            if (visitedFiles.has(absolutePath)) {
+                            // Prevent infinite loops from circular dependencies and handle missing files
+                            if (visitedFiles.has(absolutePath) || !fs.existsSync(absolutePath)) {
                                 return;
                             }
                             visitedFiles.add(absolutePath);
@@ -59,8 +72,8 @@ const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visite
                             const targetCode = fs.readFileSync(absolutePath, 'utf-8');
                             const { ast, comments: comm } = Parser(targetCode);
 
-                            // Recursively extract routes from the sub-router
-                            const childRoutes = extractApiRoutes(absolutePath, ast, comm, basePath, visitedFiles, isStrict);
+                            // Recursively extract routes from the sub-router with accumulated base path
+                            const childRoutes = extractApiRoutes(absolutePath, ast, comm, parentsUrl + basePath, visitedFiles, isStrict);
                             
                             apiList.push(...childRoutes);
                         }
@@ -120,7 +133,8 @@ const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visite
                             Tag: tag,
                             Summary: summary,
                             Method: method,
-                            Path: parentsUrl + currentPath,
+                            // Prevent duplicate slashes in the final path
+                            Path: (parentsUrl + currentPath).replace(/\/+/g, '/'),
                             Req: parsedReq.length > 0 ? parsedReq : null,
                             Res: parsedRes.length > 0 ? parsedRes : null
                         });
@@ -131,8 +145,4 @@ const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visite
     });
 
     return apiList;
-};
-
-module.exports = {
-    extractApiRoutes,
 };

@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path')
+import fs from 'fs';
+import path from 'path';
+import { createRequire } from 'module';
+import { Parser } from './src/parser.js';
+import { extractApiRoutes } from './src/extractor.js';
+import { generateDocs } from './src/generator.js';
+
+// package.json 읽기 (가장 안전한 방식)
+const require = createRequire(import.meta.url);
 const packageJson = require('./package.json');
-const { Parser } = require('./src/parser');
-const { extractApiRoutes } = require('./src/extractor');
-const { generateDocs } = require('./src/generator');
 
 try {
     const userInput = process.argv.slice(2);
 
     if (userInput.length === 0) {
-        console.log(`
-Welcome to nodejs-api-docgen
-
-Run 'api-docgen --help' for usage instructions.
-        `);
+        console.log(`\nWelcome to nodejs-api-docgen\n\nRun 'api-docgen --help' for usage instructions.\n`);
         process.exit(0);
     }
 
@@ -48,21 +48,18 @@ Comment Block Format:
     router.post('/', (req, res) => { ... });
 
 For more detailed guides, visit: https://github.com/nnxi/nodejs-api-docgen
-        `)
+        `);
         process.exit(0);
     }
     else if (userInput.includes('--version') || userInput.includes('-v')) {
-        console.log(`
-nodejs-api-docgen
-version: ${packageJson.version}
-        `);
+        console.log(`\nnodejs-api-docgen\nversion: ${packageJson.version}\n`);
         process.exit(0);
     }
 
     console.log('api docgen is running');
 
     const isStrict = userInput.includes('--strict');
-    const startTargetPath = userInput.find(arg => !arg.startsWith('-')) || 'app.js';  // find arg not option
+    const startTargetPath = userInput.find(arg => !arg.startsWith('-')) || 'app.js';
     
     const absoluteRootPath = path.resolve(process.cwd(), startTargetPath);
 
@@ -77,14 +74,15 @@ version: ${packageJson.version}
     try {
         const targetCode = fs.readFileSync(absoluteRootPath, 'utf-8');
 
+        // Parser가 함수라면 Parser(targetCode), 객체라면 Parser.parse(targetCode) 확인 필요
         const { ast, comments } = Parser(targetCode);
         
         const extractedData = extractApiRoutes(absoluteRootPath, ast, comments, '', visitedFiles, isStrict); 
 
         generateDocs(extractedData);
     } catch (err) {
-        console.log('Error: ', err.message);
+        console.log('Error in processing: ', err.stack); // 스택까지 봐야 디버깅이 편합니다
     }
 } catch (err) {
-    console.log('Error: ', err.message);
+    console.log('General Error: ', err.message);
 }

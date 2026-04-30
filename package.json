@@ -1,6 +1,6 @@
 {
   "name": "nodejs-api-docgen",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Generate clean Express API docs directly from route comments using AST",
   "main": "index.js",
   "bin": {
@@ -24,7 +24,7 @@
   ],
   "author": "nnxi",
   "license": "MIT",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "acorn": "^8.16.0",
     "acorn-walk": "^8.3.5"

@@ -1,8 +1,8 @@
-const fs = require('fs');
-const path = require('path');
-const { exec } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import { exec } from 'child_process';
 
-const generateDocs = (apiList) => {
+export const generateDocs = (apiList) => {
     try {
         const flatedList = apiList.flat();
 
@@ -125,7 +125,6 @@ const generateDocs = (apiList) => {
                     font-size: 0.95rem;
                 }
 
-                /* 드롭다운 (Details & Summary) 스타일 */
                 details.tag-group {
                     background: white;
                     border-radius: 8px;
@@ -185,7 +184,6 @@ const generateDocs = (apiList) => {
                     gap: 20px;
                 }
 
-                /* API 라우트 카드 스타일 */
                 .route-card {
                     border: 1px solid var(--border-color);
                     border-radius: 8px;
@@ -212,7 +210,6 @@ const generateDocs = (apiList) => {
                     font-weight: 500;
                 }
 
-                /* 세로 나열 레이아웃 */
                 .payload-container {
                     display: flex;
                     flex-direction: column;
@@ -299,6 +296,7 @@ const generateDocs = (apiList) => {
             if (error) console.log('Error:', error.message);
         });
 
+        // Update instructions for ESM compatibility
         console.log(`
 ==================================================
 Success! API documentation generated.
@@ -307,8 +305,9 @@ File: ${filePath}
 [Next Step: How to share with your team]
 Add the following code to your Express entry file:
 
+import path from 'path';
+
 app.get('/api-docs', (req, res) => {
-    const path = require('path');
     res.sendFile(path.join(process.cwd(), 'api-docs.html'));
 });
 ==================================================
@@ -317,8 +316,4 @@ app.get('/api-docs', (req, res) => {
     } catch (err) {
         console.log('Error: ', err.message);
     }
-};
-
-module.exports = {
-    generateDocs,
 };

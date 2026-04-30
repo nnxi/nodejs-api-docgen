@@ -1,19 +1,17 @@
-const acorn = require('acorn');
+import * as acorn from 'acorn';
 
-const Parser = (targetCode) => {
+export const Parser = (targetCode) => {
     const comments = [];
 
+    // Remove shebang to prevent parsing errors
     const cleanCode = targetCode.replace(/^#!.*/, '');
 
     const ast = acorn.parse(cleanCode, { 
-        ecmaVersion: 2020,
+        ecmaVersion: 'latest', 
+        sourceType: 'module',  
         locations: true, 
         onComment: comments
     });
 
     return { ast, comments };
-};
-
-module.exports = {
-    Parser,
 };
