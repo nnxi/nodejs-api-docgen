@@ -63,7 +63,6 @@
                     font-size: 0.95rem;
                 }
 
-                /* 드롭다운 (Details & Summary) 스타일 */
                 details.tag-group {
                     background: white;
                     border-radius: 8px;
@@ -123,7 +122,6 @@
                     gap: 20px;
                 }
 
-                /* API 라우트 카드 스타일 */
                 .route-card {
                     border: 1px solid var(--border-color);
                     border-radius: 8px;
@@ -150,7 +148,6 @@
                     font-weight: 500;
                 }
 
-                /* 세로 나열 레이아웃 */
                 .payload-container {
                     display: flex;
                     flex-direction: column;
@@ -293,6 +290,36 @@
                                 <div class="payload-section">
                                     <div class="payload-title">Response</div>
                                     <pre>201 { success: boolean }</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    </div>
+                </details>
+            
+                <details class="tag-group" open>
+                    <summary class="tag-title">
+                        Uncategorized <span class="route-count">1 endpoints</span>
+                    </summary>
+                    <div class="tag-content">
+                        
+                    <div class="route-card">
+                        <div class="route-header">
+                            <span class="method post">POST</span>
+                            <code>/api/posts/no-tag</code>
+                        </div>
+                        <div class="route-body">
+                            <div class="summary-text">No summary provided.</div>
+                            
+                            <div class="payload-container">
+                                <div class="payload-section">
+                                    <div class="payload-title">Request</div>
+                                    <pre>None</pre>
+                                </div>
+                                <div class="payload-section">
+                                    <div class="payload-title">Response</div>
+                                    <pre>None</pre>
                                 </div>
                             </div>
                         </div>

@@ -7,7 +7,6 @@ import { Parser } from './src/parser.js';
 import { extractApiRoutes } from './src/extractor.js';
 import { generateDocs } from './src/generator.js';
 
-// package.json 읽기 (가장 안전한 방식)
 const require = createRequire(import.meta.url);
 const packageJson = require('./package.json');
 

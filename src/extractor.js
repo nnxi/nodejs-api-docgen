@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import walk from 'acorn-walk';
+import * as walk from 'acorn-walk';
 import { Parser } from '../src/parser.js';
 
 export const extractApiRoutes = (parentsPath, ASTree, comments, parentsUrl = '', visitedFiles, isStrict) => {

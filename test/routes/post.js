@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 /**
@@ -32,8 +32,11 @@ router.get('/:id', (req, res) => {
  * @res 201 { success: boolean }
  */
 router.post('/secret', (req, res) => {
-    // @api-docgen 태그가 없으므로 strict 모드에서는 문서화되지 않아야 합니다.
     res.status(201).json({ success: true });
 });
 
-module.exports = router;
+router.post('/no-tag', (req, res) => {
+    res.status(201).json({ success: true });
+})
+
+export default router;

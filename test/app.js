@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-const postRouter = require('./routes/post');
+import postRouter from './routes/post.js';
 const userRouter = require('./routes/user');
 
 app.use('/api/posts', postRouter);

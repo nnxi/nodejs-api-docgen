@@ -1,6 +1,6 @@
 {
   "name": "nodejs-api-docgen",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Generate clean Express API docs directly from route comments using AST",
   "main": "index.js",
   "bin": {
@@ -11,7 +11,8 @@
     "src/"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "echo '\nnodejs-api-docgen installed successfully!\nType \"api-docgen --help\" to get started.\n'"
   },
   "keywords": [
     "api",
