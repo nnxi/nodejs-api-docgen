@@ -6,6 +6,18 @@ export const generateDocs = (apiList) => {
     try {
         const flatedList = apiList.flat();
 
+        const getProjectName = () => {
+            try {
+                const packageJsonPath = path.join(process.cwd(), 'packageJson');
+
+                if (fs.existsSync(packageJsonPath)) {
+                    const packageData = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+                    return packageData.name || null;
+                }
+            } catch (err) { }
+            return null;
+        }
+
         if (flatedList.length === 0) {
             console.log('No API routes were found in the specified directory.');
             return;
@@ -59,6 +71,11 @@ export const generateDocs = (apiList) => {
                 </details>
             `;
         }
+
+        const projectName = getProjectName();
+        const headerTitle = projectName
+            ? `API Routes Reference for ${projectName}`
+            : 'API Routes Reference';
 
         const htmlTemplate = `
         <!DOCTYPE html>
@@ -273,7 +290,7 @@ export const generateDocs = (apiList) => {
             </header>
             
             <main>
-                <h1>API Routes Reference</h1>
+                <h1>${headerTitle}</h1>
                 <p class="subtitle">Automatically generated documentation for your backend API services.</p>
                 
                 <div class="api-container">
