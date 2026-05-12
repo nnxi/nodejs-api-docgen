@@ -73,14 +73,13 @@ For more detailed guides, visit: https://github.com/nnxi/nodejs-api-docgen
     try {
         const targetCode = fs.readFileSync(absoluteRootPath, 'utf-8');
 
-        // Parser가 함수라면 Parser(targetCode), 객체라면 Parser.parse(targetCode) 확인 필요
         const { ast, comments } = Parser(targetCode);
         
         const extractedData = extractApiRoutes(absoluteRootPath, ast, comments, '', visitedFiles, isStrict); 
 
-        generateDocs(extractedData);
+        generateDocs(extractedData, absoluteRootPath);
     } catch (err) {
-        console.log('Error in processing: ', err.stack); // 스택까지 봐야 디버깅이 편합니다
+        console.log('Error in processing: ', err.stack);
     }
 } catch (err) {
     console.log('General Error: ', err.message);

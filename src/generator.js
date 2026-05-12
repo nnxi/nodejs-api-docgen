@@ -2,21 +2,28 @@ import fs from 'fs';
 import path from 'path';
 import { exec } from 'child_process';
 
-export const generateDocs = (apiList) => {
+const getProjectName = (targetFilePath) => {
+    try {
+        let currentDir = path.dirname(path.resolve(targetFilePath));
+        const rootDir = path.parse(currentDir).root;
+
+        while (currentDir !== rootDir) {
+            const packageJsonPath = path.join(currentDir, 'package.json');
+
+            if (fs.existsSync(packageJsonPath)) {
+                const packageData = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+                return packageData.name || null;
+            }
+            
+            currentDir = path.dirname(currentDir);
+        }
+    } catch (err) { }
+    return null;
+};
+
+export const generateDocs = (apiList, targetFilePath) => {
     try {
         const flatedList = apiList.flat();
-
-        const getProjectName = () => {
-            try {
-                const packageJsonPath = path.join(process.cwd(), 'packageJson');
-
-                if (fs.existsSync(packageJsonPath)) {
-                    const packageData = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
-                    return packageData.name || null;
-                }
-            } catch (err) { }
-            return null;
-        }
 
         if (flatedList.length === 0) {
             console.log('No API routes were found in the specified directory.');
@@ -72,7 +79,7 @@ export const generateDocs = (apiList) => {
             `;
         }
 
-        const projectName = getProjectName();
+        const projectName = getProjectName(targetFilePath);
         const headerTitle = projectName
             ? `API Routes Reference for ${projectName}`
             : 'API Routes Reference';
